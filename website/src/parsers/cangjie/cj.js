@@ -47,17 +47,20 @@ export default {
 
   nodeToRange(node) {
     if (node.beginPos && node.endPos) {
-      console.log('nodeToRange', node);
       const start = node.beginPos;
       const end = node.endPos;
       const startOffset = this.getOffset(start);
       const endOffset = this.getOffset(end);
       return [startOffset, endOffset];
-    } else if (node.pos && node.value) {
+    }
+    if (node.pos && node.value) {
       const start = node.pos;
-      const end = node.pos + node.value.length;
       const startOffset = this.getOffset(start);
-      const endOffset = this.getOffset(end);
+      const endOffset = startOffset + node.value.length;
+      console.log('nodeToRange', node, startOffset, endOffset);
+      if (Number.isNaN(startOffset)) {
+        return;
+      }
       return [startOffset, endOffset];
     }
   },
@@ -65,5 +68,4 @@ export default {
   opensByDefault(node, key) {
     return node._type || Array.isArray(node);
   },
-  
 };
